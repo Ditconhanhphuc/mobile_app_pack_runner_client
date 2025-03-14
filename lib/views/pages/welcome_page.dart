@@ -1,3 +1,4 @@
+import 'package:client/views/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -30,14 +31,14 @@ class WelcomePage extends StatelessWidget {
                 ),
                 FilledButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return const OnboardingPage();
-                    //     },
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const OnboardingPage();
+                        },
+                      ),
+                    );
                   },
                   style: FilledButton.styleFrom(
                     minimumSize: Size(double.infinity, 40.0),

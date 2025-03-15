@@ -44,8 +44,10 @@ class _SignupPageState extends State<SignupPage> {
                 buildTextField('Industry', 'Choose industry'),
                 buildTextField('Phone Number', 'Enter your phone number'),
                 buildTextField('Email', 'Enter your email address'),
-                buildTextField('Password', 'Enter your password', obscureText: true),
-                buildTextField('Confirm Password', 'Enter your password', obscureText: true),
+                buildTextField('Password', 'Enter your password',
+                    obscureText: true),
+                buildTextField('Confirm Password', 'Enter your password',
+                    obscureText: true),
                 SizedBox(height: 10),
                 Row(
                   children: [
@@ -88,7 +90,24 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: 20.0),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (agreeToTerms) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const SigninPage();
+                          },
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please agree to terms and conditions'),
+                        ),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF0F698C),
                     minimumSize: Size(double.infinity, 50),
@@ -147,7 +166,10 @@ class _SignupPageState extends State<SignupPage> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 18, color: Color(0xFF000000), fontWeight: FontWeight.w400),
+            style: TextStyle(
+                fontSize: 18,
+                color: Color(0xFF000000),
+                fontWeight: FontWeight.w400),
           ),
           SizedBox(height: 5),
           TextFormField(
@@ -166,7 +188,8 @@ class _SignupPageState extends State<SignupPage> {
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black, width: 1.5),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             ),
           ),
         ],

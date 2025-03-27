@@ -44,9 +44,14 @@ class _HomePageState extends State<HomePage> {
   };
   // Khai bao bien cho phan statistical
 
+  // Khai bao bien cho phan Return Processing
+  int _selectedTabIndex = 0;
+  final List<String> _tabs = ["Return Processing", "Partial Delivery"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF2F2F3),
       // drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -375,7 +380,7 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -534,16 +539,284 @@ class _HomePageState extends State<HomePage> {
 
   // ----------- End Statistical Section -----------
 
+  // ----------- Return Processing Section -----------
+
   Widget _buildReturnProcessingSection() {
+    double returnedPercentage = 30;
+    double returningPercentage = 70;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 40),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 120,
+                child: const Text("Return Processing",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                child: Row(
+                  children: [
+                    ToggleButtons(
+                      borderRadius: BorderRadius.circular(4),
+                      borderWidth: 0,
+                      constraints:
+                          const BoxConstraints(maxWidth: 100, minHeight: 40),
+                      isSelected: List.generate(
+                          _tabs.length, (index) => index == _selectedTabIndex),
+                      onPressed: (index) {
+                        setState(() {
+                          _selectedTabIndex = index;
+                        });
+                      },
+                      selectedColor: Colors.black, // Màu chữ khi chọn
+                      fillColor: Color(0xFFECEDF1), // Màu nền khi được chọn
+                      children: _tabs
+                          .map((tab) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Text(tab,
+                                    style: const TextStyle(fontSize: 16)),
+                              ))
+                          .toList(),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          _selectedTabIndex == 0
+              ? _buildReturnProcessingContent()
+              : _buildPartialDeliveryContent(
+                  returnedPercentage, returningPercentage),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReturnProcessingContent() {
+    List<Map<String, dynamic>> returnStatuses = [
+      {
+        "title": "Pending Return Processing",
+        "count": 0,
+        "color": Colors.red,
+        "icon": "assets/icons/home_return_pending.svg"
+      },
+      {
+        "title": "Unable to Contact",
+        "count": 0,
+        "color": Colors.green,
+        "icon": "assets/icons/home_return_nocontact.svg"
+      },
+      {
+        "title": "Customer Rejected Delivery",
+        "count": 0,
+        "color": Colors.orange,
+        "icon": "assets/icons/home_return_reject.svg"
+      },
+      {
+        "title": "Wrong Delivery Address",
+        "count": 0,
+        "color": Colors.blue,
+        "icon": "assets/icons/home_return_incorrectAdd.svg"
+      },
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: GridView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: returnStatuses.length,
+        itemBuilder: (context, index) {
+          var status = returnStatuses[index];
+          return Card(
+            elevation: 0,
+            color: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 8),
+                  SvgPicture.asset(
+                    status["icon"],
+                    height: 48,
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      status["title"],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "${status["count"]} orders",
+                    style: TextStyle(
+                      color: status["color"],
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPartialDeliveryContent(
+      double returnedPercentage, double returningPercentage) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Total partially signed orders:",
+                      style: TextStyle(fontSize: 16)),
+                  Text(
+                      "${(returnedPercentage + returningPercentage).toInt()} orders",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                ],
+              ),
+              SizedBox(height: 16),
+              CustomPaint(
+                size: Size(100, 50), // Đặt kích thước cho nửa vòng tròn
+                painter:
+                    HalfCircleChart(returnedPercentage, returningPercentage),
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.circle, color: Color(0xFF25CC9B), size: 18),
+                  SizedBox(width: 5),
+                  Column(
+                    children: [
+                      Text(
+                        "${returnedPercentage.toInt()} orders",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "Returned",
+                        style:
+                            TextStyle(color: Color(0xFF686E75), fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 30),
+                  Icon(Icons.circle, color: Color(0xFFD0D4DE), size: 18),
+                  SizedBox(width: 5),
+                  Column(
+                    children: [
+                      Text(
+                        "${returningPercentage.toInt()} orders",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "Returning",
+                        style:
+                            TextStyle(color: Color(0xFF686E75), fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    _buildInfoCard(
+                        "Total COD Amount", "0 VND", Color(0xFFF2F7FF)!),
+                    SizedBox(height: 14),
+                    _buildInfoCard(
+                        "Total Signed COD Amount", "0 VND", Color(0xFFE8FEF7)!),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(String title, String value, Color color) {
     return Container(
-      height: 100,
-      color: Colors.red[100],
-      child: const Center(child: Text("Return Processing Section")),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Căn trái text trong Column
+        children: [
+          Expanded(
+            // Đảm bảo chiều rộng bằng nhau
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Căn trái text
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                ),
+                SizedBox(height: 4), // Tạo khoảng cách giữa hai dòng
+                Text(
+                  value,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-// 🎨 CustomPainter để vẽ biểu đồ tròn (Pie Chart)
+// ----------- End Return Processing Section -----------
+
+// CustomPainter để vẽ biểu đồ tròn (Pie Chart)
 class PieChartPainter extends CustomPainter {
   final Map<String, double> statistics;
   final Map<String, Color> colors;
@@ -577,6 +850,41 @@ class PieChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(PieChartPainter oldDelegate) => true;
 }
+
+// Vẽ hafl pie chart cho phần return processing
+class HalfCircleChart extends CustomPainter {
+  final double returnedPercentage;
+  final double returningPercentage;
+
+  HalfCircleChart(this.returnedPercentage, this.returningPercentage);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 12;
+
+    final double radius = size.width / 2;
+    final Offset center = Offset(size.width / 2, size.height);
+    final double totalPercentage = returnedPercentage + returningPercentage;
+    final double startAngle = -3.14; // Bắt đầu từ bên trái
+    final double returnedAngle = (returnedPercentage / totalPercentage) * 3.14;
+    final double returningAngle =
+        (returningPercentage / totalPercentage) * 3.14;
+
+    paint.color = Color(0xFF25CC9B);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
+        returnedAngle, false, paint);
+
+    paint.color = Color(0xFFD0D4DE);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+        startAngle + returnedAngle, returningAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
 
 // Drawer Menu
 // class AppDrawer extends StatelessWidget {

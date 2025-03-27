@@ -1,3 +1,5 @@
+import 'package:client/views/pages/home_page.dart';
+import 'package:client/views/widget_tree.dart';
 import 'package:flutter/material.dart';
 
 class SigninPage extends StatelessWidget {
@@ -64,7 +66,17 @@ class SigninPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return WidgetTree();
+                      },
+                    ),
+                    (route) => false,
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F698C),
                   minimumSize: Size(double.infinity, 50),
@@ -78,7 +90,7 @@ class SigninPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 100),
-              Row(
+              const Row(
                 children: [
                   Expanded(child: Divider()),
                   Padding(

@@ -608,25 +608,25 @@ class _HomePageState extends State<HomePage> {
       {
         "title": "Pending Return Processing",
         "count": 0,
-        "color": Colors.red,
+        "color": Color(0xFFFA3D2F),
         "icon": "assets/icons/home_return_pending.svg"
       },
       {
         "title": "Unable to Contact",
         "count": 0,
-        "color": Colors.green,
+        "color": Color(0xFF55B498),
         "icon": "assets/icons/home_return_nocontact.svg"
       },
       {
         "title": "Customer Rejected Delivery",
         "count": 0,
-        "color": Colors.orange,
+        "color": Color(0xFFFDB03C),
         "icon": "assets/icons/home_return_reject.svg"
       },
       {
         "title": "Wrong Delivery Address",
         "count": 0,
-        "color": Colors.blue,
+        "color": Color(0xFF0F698C),
         "icon": "assets/icons/home_return_incorrectAdd.svg"
       },
     ];

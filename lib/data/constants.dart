@@ -20,3 +20,8 @@ class KValue {
   static const String basicLayout = 'Basic Layout';
   static const String keyConcepts = 'Key Concepts';
 }
+
+class KColors {
+  static const Color primary = Color(0xFF0F698C);
+  static const Color secondary = Color(0xFFA0A4AB);
+}

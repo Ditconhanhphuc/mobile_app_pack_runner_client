@@ -1,3 +1,4 @@
+import 'package:client/data/constants.dart';
 import 'package:client/views/pages/signin_page.dart';
 import 'package:client/views/pages/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class OnboardingPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0F698C),
+                      backgroundColor: KColors.primary,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -61,7 +62,7 @@ class OnboardingPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0F698C),
+                      backgroundColor: KColors.primary,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

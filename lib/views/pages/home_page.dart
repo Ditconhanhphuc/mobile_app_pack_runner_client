@@ -63,24 +63,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _pickDateRange() async {
-  DateTime now = DateTime.now();
-  DateTimeRange? picked = await showDateRangePicker(
-    context: context,
-    firstDate: DateTime(2000),
-    lastDate: now, // Giới hạn chỉ chọn đến ngày hiện tại
-    initialDateRange: selectedDateRange,
-  );
-
-  if (picked != null) {
-    debugPrint("Date picked: ${picked.start} - ${picked.end}");
-    setState(() {
-      selectedDateRange = picked;
-    });
-  }
-}
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F3),
@@ -252,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 28,
                               ),
                               onPressed: () {
-                                // debugPrint("Calendar Icon Pressed!"); 
+                                // debugPrint("Calendar Icon Pressed!");
                                 _pickDateRange();
                               },
                             ),
@@ -278,13 +260,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const CreateOrderPage();
-                        },
-                      ),
-                    );
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const CreateOrderPage();
+                          },
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -929,7 +911,6 @@ class HalfCircleChart extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
-
 
 // Drawer Menu
 // class AppDrawer extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:client/data/constants.dart';
 import 'package:client/data/notifiers.dart';
 import 'package:client/views/pages/cash_flow_page.dart';
 import 'package:client/views/pages/create_order_page.dart';
@@ -19,8 +20,7 @@ List<String> appBarTitles = [
   'Home',
   'Cash Flow Management',
   'Order',
-  'Personal'
-];
+  'Account Setup'
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
@@ -32,13 +32,15 @@ class WidgetTree extends StatelessWidget {
       builder: (context, selectedPage, child) {
         bool isHomePage = selectedPage == 0;
         bool isOrderPage = selectedPage == 2;
-
+        bool isPersonalPage = selectedPage == 3;
         return Scaffold(
           appBar: isHomePage
               ? null
               : AppBar(
                   title: Text(appBarTitles[selectedPage],
                       style: const TextStyle(fontWeight: FontWeight.bold)),
+                  backgroundColor: isPersonalPage ? KColors.primary : Colors.white,
+                  foregroundColor: isPersonalPage ? Colors.white : Colors.black,
                   backgroundColor: Colors.white,
                   leading: IconButton(
                     icon: const Icon(Icons.menu),

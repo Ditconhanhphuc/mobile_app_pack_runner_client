@@ -74,6 +74,7 @@ flutter:
     - assets/icons/
     - assets/icons/create_order/
     - assets/icons/nav_bar/
+    - assets/icons/account/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

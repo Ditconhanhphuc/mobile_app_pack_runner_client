@@ -1,3 +1,4 @@
+import 'package:client/data/constants.dart';
 import 'package:client/views/pages/home_page.dart';
 import 'package:client/views/widget_tree.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class SigninPage extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {},
                   child: Text('Forgot password?',
-                      style: TextStyle(color: Color(0xFF0F698C))),
+                      style: TextStyle(color: KColors.primary)),
                 ),
               ),
               SizedBox(height: 10),
@@ -78,7 +79,7 @@ class SigninPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0F698C),
+                  backgroundColor: KColors.primary,
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -133,7 +134,7 @@ class SigninPage extends StatelessWidget {
                 child: Text(
                   'Terms of Service & Privacy Policy',
                   style: TextStyle(
-                      color: Color(0xFF0F698C), fontWeight: FontWeight.bold),
+                      color: KColors.primary, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(height: 60),

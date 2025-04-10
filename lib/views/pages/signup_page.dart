@@ -1,3 +1,4 @@
+import 'package:client/data/constants.dart';
 import 'package:client/views/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +68,7 @@ class _SignupPageState extends State<SignupPage> {
                             TextSpan(
                               text: 'Terms of Service, Privacy Policy, ',
                               style: TextStyle(
-                                  color: Color(0xFF0F698C),
+                                  color: KColors.primary,
                                   fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
@@ -76,7 +77,7 @@ class _SignupPageState extends State<SignupPage> {
                             TextSpan(
                               text: 'Personal Data Protection Policy ',
                               style: TextStyle(
-                                  color: Color(0xFF0F698C),
+                                  color: KColors.primary,
                                   fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
@@ -109,7 +110,7 @@ class _SignupPageState extends State<SignupPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0F698C),
+                    backgroundColor: KColors.primary,
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -140,7 +141,7 @@ class _SignupPageState extends State<SignupPage> {
                           TextSpan(
                             text: 'Log in now',
                             style: TextStyle(
-                              color: Color(0xFF0F698C),
+                              color: KColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -1,0 +1,2 @@
+/Users/hagiang/Workspace/proj/Pack_Runner/client/android/app/.cxx/Debug/6u5g3j3g/x86_64/CMakeFiles/edit_cache.dir
+/Users/hagiang/Workspace/proj/Pack_Runner/client/android/app/.cxx/Debug/6u5g3j3g/x86_64/CMakeFiles/rebuild_cache.dir

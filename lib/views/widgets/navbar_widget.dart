@@ -1,3 +1,4 @@
+import 'package:client/data/constants.dart';
 import 'package:client/data/notifiers.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +17,11 @@ class NavbarWidget extends StatelessWidget {
           },
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.signal_cellular_alt),
               label: 'Overview',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.attach_money),
+              icon: Icon(Icons.monetization_on),
               label: 'Cash Flow',
             ),
             BottomNavigationBarItem(
@@ -28,12 +29,12 @@ class NavbarWidget extends StatelessWidget {
               label: 'Order',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.account_circle),
               label: 'Personal',
             ),
           ],
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: KColors.primary,
+          unselectedItemColor: KColors.secondary,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
         );
@@ -41,35 +42,3 @@ class NavbarWidget extends StatelessWidget {
     );
   }
 }
-
-// import 'package:client/data/notifiers.dart';
-// import 'package:flutter/material.dart';
-
-// class NavbarWidget extends StatelessWidget {
-//   const NavbarWidget({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ValueListenableBuilder(
-//       valueListenable: selectedPageNotifier,
-//       builder: (context, selectedPage, child) {
-//         return NavigationBar(
-//           destinations: const [
-//             NavigationDestination(
-//               icon: Icon(Icons.home),
-//               label: 'Home',
-//             ),
-//             NavigationDestination(
-//               icon: Icon(Icons.person),
-//               label: 'Profile',
-//             ),
-//           ],
-//           onDestinationSelected: (int value) {
-//             selectedPageNotifier.value = value;
-//           },
-//           selectedIndex: selectedPage,
-//         );
-//       },
-//     );
-//   }
-// }

@@ -1,3 +1,5 @@
+import 'package:client/data/constants.dart';
+import 'package:client/views/pages/create_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +50,36 @@ class _HomePageState extends State<HomePage> {
   int _selectedTabIndex = 0;
   final List<String> _tabs = ["Return Processing", "Partial Delivery"];
 
+  // Khai báo biến phần header (time))
+  late DateTimeRange selectedDateRange;
+
   @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    selectedDateRange = DateTimeRange(
+      start: now.subtract(const Duration(days: 6)),
+      end: now,
+    );
+  }
+
+  Future<void> _pickDateRange() async {
+    DateTime now = DateTime.now();
+    DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: now, // Giới hạn chỉ chọn đến ngày hiện tại
+      initialDateRange: selectedDateRange,
+    );
+
+    if (picked != null) {
+      debugPrint("Date picked: ${picked.start} - ${picked.end}");
+      setState(() {
+        selectedDateRange = picked;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F3),
@@ -213,19 +244,25 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Row(
                           children: [
-                            SvgPicture.asset(
-                              "assets/icons/home_header_calendar.svg",
-                              width: 28,
-                              height: 28,
+                            IconButton(
+                              icon: SvgPicture.asset(
+                                "assets/icons/home_header_calendar.svg",
+                                width: 28,
+                                height: 28,
+                              ),
+                              onPressed: () {
+                                // debugPrint("Calendar Icon Pressed!");
+                                _pickDateRange();
+                              },
                             ),
-                            const SizedBox(width: 8),
                             Text(
-                              "${DateFormat("dd/MM/yyyy").format(DateTime.now().subtract(const Duration(days: 6)))} - ${DateFormat("dd/MM/yyyy").format(DateTime.now())}",
+                              "${DateFormat("dd/MM/yyyy").format(selectedDateRange!.start)} - ${DateFormat("dd/MM/yyyy").format(selectedDateRange!.end)}",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            const SizedBox(width: 8),
                           ],
                         ),
                       ),
@@ -239,7 +276,14 @@ class _HomePageState extends State<HomePage> {
                       height: 40,
                     ),
                     onPressed: () {
-                      // Xử lý khi bấm nút "+"
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const CreateOrderPage();
+                          },
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -626,7 +670,7 @@ class _HomePageState extends State<HomePage> {
       {
         "title": "Wrong Delivery Address",
         "count": 0,
-        "color": Color(0xFF0F698C),
+        "color": KColors.primary,
         "icon": "assets/icons/home_return_incorrectAdd.svg"
       },
     ];
@@ -884,7 +928,6 @@ class HalfCircleChart extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
-
 
 // Drawer Menu
 // class AppDrawer extends StatelessWidget {

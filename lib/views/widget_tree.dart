@@ -21,6 +21,7 @@ List<String> appBarTitles = [
   'Cash Flow Management',
   'Order',
   'Account Setup'
+];
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
@@ -41,7 +42,6 @@ class WidgetTree extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   backgroundColor: isPersonalPage ? KColors.primary : Colors.white,
                   foregroundColor: isPersonalPage ? Colors.white : Colors.black,
-                  backgroundColor: Colors.white,
                   leading: IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () {},

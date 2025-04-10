@@ -63,6 +63,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _pickDateRange() async {
+    DateTime now = DateTime.now();
+    DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: now, // Giới hạn chỉ chọn đến ngày hiện tại
+      initialDateRange: selectedDateRange,
+    );
+
+    if (picked != null) {
+      debugPrint("Date picked: ${picked.start} - ${picked.end}");
+      setState(() {
+        selectedDateRange = picked;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F3),

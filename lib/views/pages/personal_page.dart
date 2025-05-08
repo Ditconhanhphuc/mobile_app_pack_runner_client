@@ -1,6 +1,5 @@
 import 'package:client/data/constants.dart';
-import 'package:client/views/pages/create_order_page.dart';
-import 'package:client/views/pages/history_order_page.dart';
+import 'package:client/views/routes/app_routes.dart';
 import 'package:client/views/widgets/history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -128,23 +127,17 @@ class _PersonalPageState extends State<PersonalPage> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: 2,
                             itemBuilder: (context, index) => HistoryItem(
-                              iconPath: "assets/icons/account/3d_box.svg",
-                              from: "Sai Gon Gateway",
-                              to: "Phuong Trang Bus Line",
-                              price: "100 000 VND",
-                              dateTime: "10:00, January 15, 2025"
-                            ),
+                                iconPath: "assets/icons/account/3d_box.svg",
+                                from: "Sai Gon Gateway",
+                                to: "Phuong Trang Bus Line",
+                                price: "100 000 VND",
+                                dateTime: "10:00, January 15, 2025"),
                           ),
                           const SizedBox(height: 10),
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HistoryOrderPage()),
-                                );
+                                Navigator.pushNamed(context, AppRoutes.historyOrder);
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,

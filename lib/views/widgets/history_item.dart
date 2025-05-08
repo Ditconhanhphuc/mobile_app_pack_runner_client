@@ -1,5 +1,5 @@
 import 'package:client/data/constants.dart';
-import 'package:client/views/pages/create_order_page.dart';
+import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -69,14 +69,7 @@ class HistoryItem extends StatelessWidget {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const CreateOrderPage();
-                              },
-                            ),
-                          );
+                          Navigator.pushNamed(context, AppRoutes.createOrder);
                         },
                         child: const Text("Book again",
                             style: TextStyle(

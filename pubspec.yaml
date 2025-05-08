@@ -44,6 +44,12 @@ dependencies:
   maths: ^0.0.2
   image_picker: ^1.1.2
   permission_handler: ^11.4.0
+  qr_code_scanner_plus: ^2.0.10+1
+  google_maps_flutter: ^2.12.1
+
+# dependency_overrides:
+#   qr_code_scanner:
+#     path: plugins/qr_code_scanner
 
 dev_dependencies:
   flutter_test:

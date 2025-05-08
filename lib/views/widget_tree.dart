@@ -1,10 +1,11 @@
 import 'package:client/data/constants.dart';
 import 'package:client/data/notifiers.dart';
 import 'package:client/views/pages/cash_flow_page.dart';
-import 'package:client/views/pages/create_order_page.dart';
 import 'package:client/views/pages/home_page.dart';
 import 'package:client/views/pages/order_page.dart';
 import 'package:client/views/pages/personal_page.dart';
+import 'package:client/views/routes/app_routes.dart';
+import 'package:client/views/widgets/drawer_menu_widget.dart';
 import 'package:client/views/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,16 +36,22 @@ class WidgetTree extends StatelessWidget {
         bool isOrderPage = selectedPage == 2;
         bool isPersonalPage = selectedPage == 3;
         return Scaffold(
+          drawer: DrawerMenuWidget(userName: "Huỳnh Thị Hà Giang"),
           appBar: isHomePage
               ? null
               : AppBar(
                   title: Text(appBarTitles[selectedPage],
                       style: const TextStyle(fontWeight: FontWeight.bold)),
-                  backgroundColor: isPersonalPage ? KColors.primary : Colors.white,
+                  backgroundColor:
+                      isPersonalPage ? KColors.primary : Colors.white,
                   foregroundColor: isPersonalPage ? Colors.white : Colors.black,
-                  leading: IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {},
+                  leading: Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
                   ),
                   actions: isOrderPage
                       ? [
@@ -65,14 +72,7 @@ class WidgetTree extends StatelessWidget {
                               height: 34,
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const CreateOrderPage();
-                                  },
-                                ),
-                              );
+                              Navigator.pushNamed(context, AppRoutes.createOrder);
                             },
                           ),
                         ]

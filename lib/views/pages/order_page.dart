@@ -1,4 +1,5 @@
 import 'package:client/data/constants.dart';
+import 'package:client/views/widgets/date_range_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,6 +37,7 @@ class _OrderPageState extends State<OrderPage>
   ];
 
   int notPickedUpOrders = 5;
+  late DateTimeRange selectedDateRange;
 
   @override
   void initState() {
@@ -47,46 +49,6 @@ class _OrderPageState extends State<OrderPage>
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  void filterData(String filter) async {
-    if (filter == "Custom range") {
-      DateTime? pickedStart = await pickDate(context, "Select start date");
-      if (pickedStart == null) return;
-
-      DateTime? pickedEnd =
-          await pickDate(context, "Select end date", pickedStart);
-      if (pickedEnd == null) return;
-
-      setState(() {
-        startDate = pickedStart;
-        endDate = pickedEnd;
-        selectedFilter =
-            "Custom: ${DateFormat('dd/MM/yyyy').format(startDate!)} - ${DateFormat('dd/MM/yyyy').format(endDate!)}";
-      });
-    } else {
-      setState(() {
-        selectedFilter = filter;
-      });
-    }
-  }
-
-  Future<DateTime?> pickDate(BuildContext context, String title,
-      [DateTime? minDate]) async {
-    return await showDatePicker(
-      context: context,
-      initialDate: minDate ?? DateTime.now(),
-      firstDate: minDate ?? DateTime(2000),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: KColors.primary),
-          ),
-          child: child!,
-        );
-      },
-    );
   }
 
   @override
@@ -149,28 +111,19 @@ class _OrderPageState extends State<OrderPage>
                       icon: Icon(Icons.arrow_drop_down, color: KColors.primary),
                       onChanged: (String? newValue) async {
                         if (newValue == "Custom range") {
-                          DateTime? start = await showDatePicker(
+                          DateTimeRange? picked =
+                              await showCustomDateRangePicker(
                             context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
                           );
-                          if (start != null) {
-                            DateTime? end = await showDatePicker(
-                              context: context,
-                              initialDate: start.add(Duration(days: 1)),
-                              firstDate: start,
-                              lastDate: DateTime(2100),
-                            );
-                            if (end != null) {
-                              setState(() {
-                                selectedFilter =
-                                    "${DateFormat('dd/MM/yyyy').format(start)} - ${DateFormat('dd/MM/yyyy').format(end)}";
-                                if (!filterOptions.contains(selectedFilter)) {
-                                  filterOptions.add(selectedFilter);
-                                }
-                              });
-                            }
+
+                          if (picked != null) {
+                            setState(() {
+                              selectedFilter =
+                                  "${DateFormat('dd/MM/yyyy').format(picked.start)} - ${DateFormat('dd/MM/yyyy').format(picked.end)}";
+                              if (!filterOptions.contains(selectedFilter)) {
+                                filterOptions.add(selectedFilter);
+                              }
+                            });
                           }
                         } else {
                           setState(() {

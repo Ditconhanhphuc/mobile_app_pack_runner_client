@@ -1,3 +1,4 @@
+import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:client/data/constants.dart';
 import 'package:client/data/notifiers.dart';
@@ -72,6 +73,8 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               home: const WelcomePage(),
+              initialRoute: AppRoutes.home,
+              onGenerateRoute: AppRoutes.generateRoute,
             );
           },
         );

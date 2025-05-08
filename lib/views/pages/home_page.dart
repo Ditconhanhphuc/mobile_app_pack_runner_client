@@ -1,5 +1,7 @@
 import 'package:client/data/constants.dart';
-import 'package:client/views/pages/create_order_page.dart';
+import 'package:client/views/routes/app_routes.dart';
+import 'package:client/views/widgets/date_range_filter.dart';
+import 'package:client/views/widgets/drawer_menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,12 +66,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _pickDateRange() async {
-    DateTime now = DateTime.now();
-    DateTimeRange? picked = await showDateRangePicker(
+    DateTimeRange? picked = await showCustomDateRangePicker(
       context: context,
-      firstDate: DateTime(2000),
-      lastDate: now, // Giới hạn chỉ chọn đến ngày hiện tại
-      initialDateRange: selectedDateRange,
+      initialRange: selectedDateRange,
     );
 
     if (picked != null) {
@@ -84,6 +83,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F3),
       // drawer: const AppDrawer(),
+      drawer: DrawerMenuWidget(userName: "Huỳnh Thị Hà Giang"),
       body: Column(
         children: [
           _buildHeader(context),
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                             Text(
-                              "${DateFormat("dd/MM/yyyy").format(selectedDateRange!.start)} - ${DateFormat("dd/MM/yyyy").format(selectedDateRange!.end)}",
+                              "${DateFormat("dd/MM/yyyy").format(selectedDateRange.start)} - ${DateFormat("dd/MM/yyyy").format(selectedDateRange.end)}",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
@@ -276,14 +276,7 @@ class _HomePageState extends State<HomePage> {
                       height: 40,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const CreateOrderPage();
-                          },
-                        ),
-                      );
+                      Navigator.pushNamed(context, AppRoutes.createOrder);
                     },
                   ),
                 ],
@@ -810,10 +803,10 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     _buildInfoCard(
-                        "Total COD Amount", "0 VND", Color(0xFFF2F7FF)!),
+                        "Total COD Amount", "0 VND", Color(0xFFF2F7FF)),
                     SizedBox(height: 14),
                     _buildInfoCard(
-                        "Total Signed COD Amount", "0 VND", Color(0xFFE8FEF7)!),
+                        "Total Signed COD Amount", "0 VND", Color(0xFFE8FEF7)),
                   ],
                 ),
               ),
@@ -928,101 +921,3 @@ class HalfCircleChart extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
-
-// Drawer Menu
-// class AppDrawer extends StatelessWidget {
-//   const AppDrawer({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Drawer(
-//       child: ListView(
-//         padding: EdgeInsets.zero,
-//         children: [
-//           const DrawerHeader(
-//             decoration: BoxDecoration(
-//               color: Colors.blueAccent,
-//             ),
-//             child: Text(
-//               "Menu",
-//               style: TextStyle(
-//                 color: Colors.white,
-//                 fontSize: 24,
-//               ),
-//             ),
-//           ),
-//           ListTile(
-//             leading: const Icon(Icons.dashboard),
-//             title: const Text("Overview"),
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) {
-//                     return const HomePage();
-//                   },
-//                 ),
-//               );
-//             },
-//           ),
-//           ListTile(
-//             leading: const Icon(Icons.attach_money),
-//             title: const Text("Cashflow"),
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) {
-//                     return const CashFlowPage();
-//                   },
-//                 ),
-//               );
-//             },
-//           ),
-//           ListTile(
-//             leading: const Icon(Icons.shopping_cart),
-//             title: const Text("Order"),
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) {
-//                     return const OrderPage();
-//                   },
-//                 ),
-//               );
-//             },
-//           ),
-//           ListTile(
-//             leading: const Icon(Icons.person),
-//             title: const Text("Personal"),
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) {
-//                     return const PersonalPage();
-//                   },
-//                 ),
-//               );
-//             },
-//           ),
-//           ListTile(
-//             leading: const Icon(Icons.settings),
-//             title: const Text("Settings"),
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) {
-//                     return const OnboardingPage();
-//                   },
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

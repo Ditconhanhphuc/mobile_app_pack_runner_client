@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:client/data/constants.dart';
+import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -104,7 +105,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 ),
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                                Navigator.pushNamed(context, AppRoutes.trackingOrder);
+                              },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(329, 50),
                       backgroundColor: KColors.primary, 

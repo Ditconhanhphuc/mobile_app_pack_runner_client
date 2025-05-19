@@ -1,6 +1,9 @@
 import 'package:client/data/constants.dart';
 import 'package:client/views/pages/signin_page.dart';
+import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -11,6 +14,57 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   bool agreeToTerms = false;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController shippingScaleController = TextEditingController();
+  final TextEditingController industryController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+
+  Future<void> registerUser() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Passwords do not match")),
+      );
+      return;
+    }
+
+    final url = Uri.parse('${KConstants.baseUrl}/register/');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'name': usernameController.text,
+        'email': emailController.text,
+        'password': passwordController.text,
+        'phone_number': phoneController.text,
+        'date_of_birth': dobController.text,
+        'group': 'User', // optional, based on your backend
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Registered successfully")),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SigninPage(),
+        ),
+      );
+    } else {
+      final data = json.decode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: ${data['message'] ?? 'Registration failed'}"),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +94,23 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildTextField('Username', 'Enter username'),
-                buildTextField('Shipping Scale', 'Choose shipping scale'),
-                buildTextField('Industry', 'Choose industry'),
-                buildTextField('Phone Number', 'Enter your phone number'),
-                buildTextField('Email', 'Enter your email address'),
-                buildTextField('Password', 'Enter your password',
+                buildTextField(
+                    'Username', 'Enter username', usernameController),
+                buildTextField('Shipping Scale', 'Choose shipping scale',
+                    shippingScaleController),
+                buildTextField(
+                    'Industry', 'Choose industry', industryController),
+                buildTextField(
+                    'Phone Number', 'Enter your phone number', phoneController),
+                buildTextField(
+                    'Email', 'Enter your email address', emailController),
+                buildTextField(
+                    'Date of Birth', 'Enter your date of birth', dobController),
+                buildTextField(
+                    'Password', 'Enter your password', passwordController,
                     obscureText: true),
                 buildTextField('Confirm Password', 'Enter your password',
+                    confirmPasswordController,
                     obscureText: true),
                 SizedBox(height: 10),
                 Row(
@@ -91,24 +154,36 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: 20.0),
                 ElevatedButton(
+                  // onPressed: () {
+                  //   if (agreeToTerms) {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) {
+                  //           return const SigninPage();
+                  //         },
+                  //       ),
+                  //     );
+                  //   } else {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(
+                  //         content: Text('Please agree to terms and conditions'),
+                  //       ),
+                  //     );
+                  //   }
+                  // },
                   onPressed: () {
                     if (agreeToTerms) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const SigninPage();
-                          },
-                        ),
-                      );
+                      registerUser(); // instead of Navigator.push
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Please agree to terms and conditions'),
-                        ),
+                            content:
+                                Text('Please agree to terms and conditions')),
                       );
                     }
                   },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: KColors.primary,
                     minimumSize: Size(double.infinity, 50),
@@ -159,21 +234,20 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Widget buildTextField(String label, String hint, {bool obscureText = false}) {
+  Widget buildTextField(
+      String label, String hint, TextEditingController controller,
+      {bool obscureText = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-                fontSize: 18,
-                color: Color(0xFF000000),
-                fontWeight: FontWeight.w400),
-          ),
-          SizedBox(height: 5),
+          Text(label,
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+          const SizedBox(height: 5),
           TextFormField(
+            controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hint,
@@ -189,8 +263,6 @@ class _SignupPageState extends State<SignupPage> {
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black, width: 1.5),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             ),
           ),
         ],

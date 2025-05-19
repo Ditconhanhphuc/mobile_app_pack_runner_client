@@ -1,9 +1,70 @@
-import 'package:client/data/constants.dart';
-import 'package:client/views/widget_tree.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class SigninPage extends StatelessWidget {
+import 'package:client/data/constants.dart';
+import 'package:client/views/pages/otp_verification_page.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
+
+  @override
+  State<SigninPage> createState() => _SigninPageState();
+}
+
+class _SigninPageState extends State<SigninPage> {
+  final phoneNumberController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isLoading = false;
+
+  // Function to handle sign-in
+  Future<void> loginUser(String phoneNumber, String password) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final url = Uri.parse('${KConstants.baseUrl}/login/');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'phone_number': phoneNumber,
+        'password': password,
+      }),
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (response.statusCode == 200) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OtpVerificationPage(
+            phoneNumber: phoneNumber,
+          ),
+        ),
+      );
+    } else {
+      final data = json.decode(response.body);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(data['error'] ?? 'Login failed.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +94,7 @@ class SigninPage extends StatelessWidget {
             children: [
               SizedBox(height: 20),
               TextField(
+                controller: phoneNumberController,
                 decoration: InputDecoration(
                   hintText: 'Enter your phone number',
                   filled: true,
@@ -45,6 +107,7 @@ class SigninPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
@@ -66,17 +129,28 @@ class SigninPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return WidgetTree();
+                // onPressed: () {
+                //   Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) {
+                //         return WidgetTree();
+                //       },
+                //     ),
+                //     (route) => false,
+                //   );
+                // },
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        final phoneNumber = phoneNumberController.text;
+                        final password = passwordController.text;
+                        if (phoneNumber.isNotEmpty && password.isNotEmpty) {
+                          loginUser(phoneNumber, password);
+                        } else {
+                          // Show validation error
+                        }
                       },
-                    ),
-                    (route) => false,
-                  );
-                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: KColors.primary,
                   minimumSize: Size(double.infinity, 50),

@@ -1,11 +1,42 @@
+import 'dart:convert';
 import 'package:client/data/constants.dart';
+import 'package:client/views/pages/onboarding_page.dart';
 import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
   final String userName;
 
   const DrawerMenuWidget({Key? key, required this.userName}) : super(key: key);
+
+  Future<void> logoutUser(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
+
+    if (refreshToken == null) {
+      // Không có token -> quay về onboarding luôn
+      Navigator.pushNamed(context, AppRoutes.onboarding);
+
+      return;
+    }
+
+    final url = Uri.parse('${KConstants.baseUrl}/logout/');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'refresh': refreshToken}),
+    );
+
+    // Xoá token local dù logout thành công hay không
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
+
+    // Chuyển về Onboarding
+          Navigator.pushNamed(context, AppRoutes.onboarding);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +139,8 @@ class DrawerMenuWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
-            onTap: () {
-              // TODO: Handle logout
+            onTap: () async {
+              await logoutUser(context);
             },
           ),
           const SizedBox(height: 10),

@@ -5,6 +5,7 @@ import 'package:client/views/pages/history_order_page.dart';
 import 'package:client/views/pages/home_page.dart';
 import 'package:client/views/pages/notification_detail_page.dart';
 import 'package:client/views/pages/notifications_page.dart';
+import 'package:client/views/pages/onboarding_page.dart';
 import 'package:client/views/pages/order_page.dart';
 import 'package:client/views/pages/personal_page.dart';
 import 'package:client/views/pages/scan_order_page.dart';
@@ -13,10 +14,12 @@ import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const String home = '/';
+  static const String otp = '/otp';
   static const String cashFlow = '/cash-flow';
   static const String historyOrder = '/order/history';
   static const String order = '/order';
   static const String profile = '/profile';
+  static const String onboarding = '/onboarding';
   static const String createOrder = '/order/create';
   static const String notifications = '/notifications';
   static const String products = '/products';
@@ -46,6 +49,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const NotificationsPage());
       case notificationDetail:
         return MaterialPageRoute(builder: (_) => const NotificationDetailPage());
+      case onboarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingPage());
       // case products:
       //   return MaterialPageRoute(builder: (_) => const Product());
       // case scanOrder:

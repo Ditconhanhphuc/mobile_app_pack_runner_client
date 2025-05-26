@@ -88,7 +88,7 @@ class _OrderPageState extends State<OrderPage>
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -97,7 +97,7 @@ class _OrderPageState extends State<OrderPage>
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Container(
                   height: 40,
-                  width: 260,
+                  width: 240,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     border: Border.all(color: KColors.primary, width: 1),
@@ -172,10 +172,10 @@ class _OrderPageState extends State<OrderPage>
                       children: [
                         Text(orderStatuses[index],
                             style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 16)),
+                                fontWeight: FontWeight.w500, fontSize: 14)),
                         Text("0 orders",
                             style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
+                                TextStyle(color: Colors.black, fontSize: 14)),
                       ],
                     ),
                   );

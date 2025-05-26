@@ -4,6 +4,7 @@ class KConstants {
   static const String themeModeKey = 'themeModeKey';
   // static final Uri baseUrl = Uri.parse('http://10.0.2.2:8000/api');
   static final Uri baseUrl = Uri.parse('http://54.66.38.252:8000/api');
+  static const String googleMapsApiKey = 'AIzaSyAJFdHGhN7WNSAx8fOcLWEoI7WM6XVVZlE';
 }
 
 class KTextStyle {

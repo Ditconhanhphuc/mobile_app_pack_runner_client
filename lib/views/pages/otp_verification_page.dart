@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:client/data/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String phoneNumber;
@@ -39,16 +40,17 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Save token to secure storage or shared_preferences if needed
-        print("Access Token: ${data['data']['access']}");
-        print("Refresh Token: ${data['data']['refresh']}");
+        final accessToken = data['data']['access'];
+        final refreshToken = data['data']['refresh'];
 
-        // Navigate to home or main screen
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('access_token', accessToken);
+        await prefs.setString('refresh_token', refreshToken);
+
+        // Chuyển hướng sau khi lưu token
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => WidgetTree(),
-          ),
+          MaterialPageRoute(builder: (context) => WidgetTree()),
         );
       } else {
         setState(() {

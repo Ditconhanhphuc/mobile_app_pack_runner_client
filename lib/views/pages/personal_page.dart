@@ -3,6 +3,8 @@ import 'package:client/views/routes/app_routes.dart';
 import 'package:client/views/widgets/history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:client/data/models/order.dart';
+import 'package:client/data/services/order_service.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -12,6 +14,7 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
+  final OrderService orderService = OrderService();
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -64,7 +67,10 @@ class _PersonalPageState extends State<PersonalPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, AppRoutes.accountInformation);
+                      },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Colors.white), // Viền có màu
                         shape: RoundedRectangleBorder(
@@ -122,22 +128,129 @@ class _PersonalPageState extends State<PersonalPage> {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
-                            itemBuilder: (context, index) => HistoryItem(
-                                iconPath: "assets/icons/account/3d_box.svg",
-                                from: "Sai Gon Gateway",
-                                to: "Phuong Trang Bus Line",
-                                price: "100 000 VND",
-                                dateTime: "10:00, January 15, 2025"),
+                          // ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   itemCount: 2,
+                          //   itemBuilder: (context, index) => HistoryItem(
+                          //       iconPath: "assets/icons/account/3d_box.svg",
+                          //       from: "Sai Gon Gateway",
+                          //       to: "Phuong Trang Bus Line",
+                          //       price: "100 000 VND",
+                          //       dateTime: "10:00, January 15, 2025"),
+                          // ),
+                          FutureBuilder<List<Order>>(
+                            future: orderService.fetchOrders(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                String errorMessage =
+                                    'Không thể tải đơn hàng: ${snapshot.error}';
+                                bool isAuthError = snapshot.error
+                                        .toString()
+                                        .contains('401') ||
+                                    snapshot.error
+                                        .toString()
+                                        .contains('No authentication token');
+                                if (isAuthError) {
+                                  errorMessage = 'Chưa đăng nhập';
+                                }
+                                if (mounted) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(errorMessage)),
+                                    );
+                                  });
+                                }
+                                return Column(
+                                  children: [
+                                    Center(child: Text(errorMessage)),
+                                    const SizedBox(height: 8),
+                                    if (isAuthError)
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, AppRoutes.home);
+                                        },
+                                        child: const Text('Đăng nhập'),
+                                      )
+                                    else
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(
+                                              () {}); // Retry fetching orders
+                                        },
+                                        child: const Text('Thử lại'),
+                                      ),
+                                    const SizedBox(height: 8),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: 2,
+                                      itemBuilder: (context, index) =>
+                                          HistoryItem(
+                                        iconPath:
+                                            "assets/icons/account/3d_box.svg",
+                                        from: "Sai Gon Gateway",
+                                        to: "Phuong Trang Bus Line",
+                                        price: "100 000 VND",
+                                        dateTime: "10:00, January 15, 2025",
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                // Fallback: Dữ liệu tĩnh nếu API không trả về
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: 2,
+                                  itemBuilder: (context, index) => HistoryItem(
+                                    iconPath: "assets/icons/account/3d_box.svg",
+                                    from: "Sai Gon Gateway",
+                                    to: "Phuong Trang Bus Line",
+                                    price: "100 000 VND",
+                                    dateTime: "10:00, January 15, 2025",
+                                  ),
+                                );
+                              }
+
+                              final orders = snapshot.data!;
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: orders.length > 2
+                                    ? 2
+                                    : orders.length, // Limit to 2 items
+                                itemBuilder: (context, index) {
+                                  final order = orders[index];
+                                  final shipment = order.shipments.isNotEmpty
+                                      ? order.shipments[0]
+                                      : null;
+
+                                  return HistoryItem(
+                                    iconPath: "assets/icons/account/3d_box.svg",
+                                    from: shipment?.senderAddress ?? 'Unknown',
+                                    to: shipment?.receiverAddress ?? 'Unknown',
+                                    price: '${order.totalPrice} VND',
+                                    dateTime: _formatDateTime(order.created),
+                                  );
+                                },
+                              );
+                            },
                           ),
                           const SizedBox(height: 10),
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, AppRoutes.historyOrder);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.historyOrder);
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -244,86 +357,6 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 
-  // Widget _historyItem(String iconPath, String from, String to, String price) {
-  //   return Card(
-  //     margin: const EdgeInsets.symmetric(vertical: 8),
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(12),
-  //       child: Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           SvgPicture.asset(
-  //             iconPath,
-  //             width: 33,
-  //             height: 33,
-  //           ),
-  //           const SizedBox(width: 12),
-  //           Expanded(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 RichText(
-  //                   text: TextSpan(
-  //                     style: const TextStyle(color: Colors.black, fontSize: 16),
-  //                     children: [
-  //                       const TextSpan(text: "From "),
-  //                       TextSpan(
-  //                         text: from,
-  //                         style: const TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             fontSize: 16,
-  //                             color: KColors.primary),
-  //                       ),
-  //                       const TextSpan(text: " to "),
-  //                       TextSpan(
-  //                         text: to,
-  //                         style: const TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             fontSize: 16,
-  //                             color: KColors.primary),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //                 const SizedBox(height: 4),
-  //                 const Text("16:24, January 17, 2025",
-  //                     style: TextStyle(color: Colors.grey, fontSize: 12)),
-  //                 Row(
-  //                   children: [
-  //                     TextButton(
-  //                       onPressed: () {
-  //                         Navigator.push(
-  //                           context,
-  //                           MaterialPageRoute(
-  //                             builder: (context) {
-  //                               return const CreateOrderPage();
-  //                             },
-  //                           ),
-  //                         );
-  //                       },
-  //                       child: const Text("Book again",
-  //                           style: TextStyle(
-  //                               color: KColors.primary, fontSize: 14)),
-  //                     ),
-  //                     Icon(
-  //                       Icons.arrow_forward,
-  //                       color: KColors.primary,
-  //                       size: 18,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           const SizedBox(width: 12),
-  //           Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _actionButton(String iconPath, String label) {
     return SizedBox(
       width: 100, // Đặt chiều rộng cố định cho tất cả các button
@@ -345,5 +378,28 @@ class _PersonalPageState extends State<PersonalPage> {
         ],
       ),
     );
+  }
+
+  String _formatDateTime(String dateTime) {
+    final parsedDate = DateTime.parse(dateTime).toLocal();
+    return '${parsedDate.hour}:${parsedDate.minute.toString().padLeft(2, '0')}, ${parsedDate.day} ${_getMonthName(parsedDate.month)}, ${parsedDate.year}';
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    return months[month - 1];
   }
 }

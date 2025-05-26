@@ -1,4 +1,5 @@
 import 'package:client/views/pages/about_us_page.dart';
+import 'package:client/views/pages/account_information_page.dart';
 import 'package:client/views/pages/cash_flow_page.dart';
 import 'package:client/views/pages/create_order_page.dart';
 import 'package:client/views/pages/history_order_page.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String aboutUs = '/about-us';
   static const String notificationDetail = '/notifications/detail';
   static const String trackingOrder = '/order/tracking';
+  static const String accountInformation = '/user/information';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -51,6 +53,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const NotificationDetailPage());
       case onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
+      case accountInformation:
+        return MaterialPageRoute(builder: (_) => AccountInfoPage());
       // case products:
       //   return MaterialPageRoute(builder: (_) => const Product());
       // case scanOrder:

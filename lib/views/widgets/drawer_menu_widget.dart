@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:client/data/constants.dart';
-import 'package:client/views/pages/onboarding_page.dart';
 import 'package:client/views/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -34,8 +33,7 @@ class DrawerMenuWidget extends StatelessWidget {
     await prefs.remove('refresh_token');
 
     // Chuyển về Onboarding
-          Navigator.pushNamed(context, AppRoutes.onboarding);
-
+    Navigator.pushNamed(context, AppRoutes.onboarding);
   }
 
   @override

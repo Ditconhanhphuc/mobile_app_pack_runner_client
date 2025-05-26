@@ -1,0 +1,2 @@
+/Users/hagiang/Workspace/proj/Pack_Runner/client/android/app/.cxx/Debug/f4u344d1/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/hagiang/Workspace/proj/Pack_Runner/client/android/app/.cxx/Debug/f4u344d1/arm64-v8a/CMakeFiles/rebuild_cache.dir

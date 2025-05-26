@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical:20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
           child: Transform.translate(
             offset: const Offset(0, 62), // Đẩy xuống 62px
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
@@ -705,7 +705,7 @@ class _HomePageState extends State<HomePage> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: 16,
+                          fontSize: 15,
                           color: Colors.black),
                     ),
                   ),
@@ -714,7 +714,7 @@ class _HomePageState extends State<HomePage> {
                     "${status["count"]} orders",
                     style: TextStyle(
                       color: status["color"],
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

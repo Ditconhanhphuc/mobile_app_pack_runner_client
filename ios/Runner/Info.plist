@@ -63,5 +63,8 @@
 	<true/>
 	<key>com.google.maps.API_KEY</key>
 	<string>AIzaSyAJFdHGhN7WNSAx8fOcLWEoI7WM6XVVZlE</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>We use Face ID to authenticate you</string>
+
 </dict>
 </plist>

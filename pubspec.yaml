@@ -49,6 +49,7 @@ dependencies:
   json_annotation: ^4.9.0
   build_runner: ^2.4.15
   json_serializable: ^6.9.5
+  local_auth: ^2.3.0
 
 # dependency_overrides:
 #   qr_code_scanner:

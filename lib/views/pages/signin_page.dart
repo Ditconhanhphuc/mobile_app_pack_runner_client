@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client/data/constants.dart';
 import 'package:client/views/pages/otp_verification_page.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,20 @@ class _SigninPageState extends State<SigninPage> {
   final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadSavedPhoneNumber();
+  }
+
+  Future<void> loadSavedPhoneNumber() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedPhone = prefs.getString('saved_phone');
+    if (savedPhone != null) {
+      phoneNumberController.text = savedPhone;
+    }
+  }
 
   // Function to handle sign-in
   Future<void> loginUser(String phoneNumber, String password) async {
@@ -38,6 +52,8 @@ class _SigninPageState extends State<SigninPage> {
     });
 
     if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('saved_phone', phoneNumber);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

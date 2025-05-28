@@ -6,6 +6,8 @@
 	<string>AIzaSyAJFdHGhN7WNSAx8fOcLWEoI7WM6XVVZlE</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow camera access for face login.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -30,8 +32,6 @@
 	<string>AIzaSyAJFdHGhN7WNSAx8fOcLWEoI7WM6XVVZlE</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ứng dụng cần vị trí để hiển thị bản đồ</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -63,8 +63,6 @@
 	<true/>
 	<key>com.google.maps.API_KEY</key>
 	<string>AIzaSyAJFdHGhN7WNSAx8fOcLWEoI7WM6XVVZlE</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>We use Face ID to authenticate you</string>
 
 </dict>
 </plist>

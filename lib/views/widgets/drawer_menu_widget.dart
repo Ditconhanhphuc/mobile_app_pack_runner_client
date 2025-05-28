@@ -33,7 +33,12 @@ class DrawerMenuWidget extends StatelessWidget {
     await prefs.remove('refresh_token');
 
     // Chuyển về Onboarding
-    Navigator.pushNamed(context, AppRoutes.onboarding);
+    // Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.onboarding,
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
